@@ -27,6 +27,11 @@ export class WhatsappService {
       authStrategy: new LocalAuth({
         dataPath: './',
       }),
+      webVersionCache: {
+        type: 'remote',
+        remotePath:
+          'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html',
+      },
     });
     console.log('[whatsappService] wpp client criado');
     this.initializeClient();
@@ -95,9 +100,9 @@ export class WhatsappService {
   }
 
   getQrCodeUrl(): any {
-    if (this.isAuthenticated) return {qr: "", isAuthenticated: true}
-    if (!this.qrCodeUrl) return  {qr: "", isAuthenticated: false}
-    return {qr: this.qrCodeUrl, isAuthenticated: false};
+    if (this.isAuthenticated) return { qr: '', isAuthenticated: true };
+    if (!this.qrCodeUrl) return { qr: '', isAuthenticated: false };
+    return { qr: this.qrCodeUrl, isAuthenticated: false };
   }
 
   async sendMessage(to: string, message: any, options = {}): Promise<Message> {

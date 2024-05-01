@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  # Serviço para o banco de dados PostgreSQL
+  postgres:
+    image: postgres:14
+    container_name: pg_database
+    environment:
+      POSTGRES_USER: postgres123  # Substitua pelo usuário desejado
+      POSTGRES_PASSWORD: postgres123  # Substitua pela senha desejada
+      POSTGRES_DB: "postgres"  # Substitua pelo nome do banco de dados desejado
+    ports:
+      - "5432:5432"  # Mapeia a porta local para o serviço
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # Volume persistente para os dados do PostgreSQL
+
+volumes:
+  pgdata:

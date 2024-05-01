@@ -1,5 +1,4 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { io, Socket } from 'socket.io-client';
 import { Order, Point, Role, Tool, User } from '@prisma/client';
 import {
   NothingToUpdate,
@@ -18,7 +17,6 @@ import { AIService } from '../AI/AI.service';
 import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { MessageMedia } from 'whatsapp-web.js';
 import { TranscriptionService } from '../prisma/transcription.service';
-import { WebsocketService } from 'src/websockets/websocket.service';
 
 interface CreateNewOrderArgs {
   from: number[];
@@ -27,7 +25,6 @@ interface CreateNewOrderArgs {
 
 @Injectable()
 export class HandleUserService {
-  protected readonly sioClient: Socket;
   protected readonly permissionMapping;
 
   constructor(
@@ -40,9 +37,7 @@ export class HandleUserService {
     protected whatsappService: WhatsappService,
     @Inject(TranscriptionService)
     protected transcriptionService: TranscriptionService,
-    @Inject(WebsocketService) protected websocketService: WebsocketService,
   ) {
-    this.sioClient = io(process.env.SOCKET_URL || '');
     this.permissionMapping = {
       USER: [Role.USER, Role.ADMIN],
       ADMIN: [Role.ADMIN],
@@ -220,8 +215,6 @@ export class HandleUserService {
           'Finished',
         );
 
-        this.websocketService.emergencyStop({ emergency_stop: 0 });
-
         return `Pedido ${updatedOrder.code} confirmado com sucesso! \n Obrigado por utilizar nossos serviços, esperamos que tenha gostado! 😁`;
       }
 
@@ -231,8 +224,6 @@ export class HandleUserService {
       );
 
       this.whatsappService.sendAdminContact(userPhone);
-
-      this.websocketService.emergencyStop({ emergency_stop: 0 });
 
       return `Ficamos muito tristes em saber que não conseguimos entregar o seu pedido. 😢. \n O pedido ${updatedOrder.code} foi cancelado com sucesso.\n Estou mandando aqui um contato de um administrador, caso queira reportar algum problema. \n Gostaria de fazer um novo pedido?`;
     } catch (e) {
@@ -271,26 +262,6 @@ export class HandleUserService {
       console.log(
         `[handleUserService] 📦 \x1b[35m Pedido \x1b[31m GRAB \x1b[35m enviado! \x1b[0m`,
       );
-
-      this.websocketService.addPointToQueue({
-        id: order.code.toString(),
-        type: 'GRAB',
-        x: from[0],
-        y: from[1],
-      });
-
-      await this.timeOut(500);
-
-      console.log(
-        `[handleUserService] 🔚 \x1b[35m Pedido \x1b[31m DROP \x1b[35m enviado! \x1b[0m`,
-      );
-
-      this.websocketService.addPointToQueue({
-        id: order.code.toString(),
-        type: 'DROP',
-        x: to[0],
-        y: to[1],
-      });
 
       return `Pedido realizado com sucesso! O número do seu pedido é: \n - ${order.code} \n Assim que chegarmos na sua localização você será informado! 😀`;
     } catch (e) {
