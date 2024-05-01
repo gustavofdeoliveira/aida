@@ -2,7 +2,7 @@ let interval;
 let callFunction = true;
 
 function fetchQRCode() {
-  fetch('http://52.5.70.100:3000/qrcode')
+  fetch('http://localhost:3000/qrcode')
     .then((response) => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -13,13 +13,13 @@ function fetchQRCode() {
       if (!data.isAuthenticated) {
         data.qr = data.qr.join('');
         // Mostrar o QR Code se estiver presente no JSON.
-        document.getElementById('qrcodeElement').src = "data:image/png;base64," + data.qr;
+        document.getElementById('qrcodeElement').src =
+          'data:image/png;base64,' + data.qr;
       } else {
         // Parar de chamar a função se o status for 202 e exibir a mensagem.
         clearInterval(interval);
         callFunction = false;
-        document.getElementById('qrcode').src =
-          '<h1>Chatbot conectado!</h1>';
+        document.getElementById('qrcode').src = '<h1>Chatbot conectado!</h1>';
         return;
       }
     })
