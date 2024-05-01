@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PrismaService } from './prisma.service';
-import { GPTFunctionCalling as GPTFunctionCallingPrisma } from '@prisma/client';
 
 @Injectable()
 export class GPTFunctionCallingService {

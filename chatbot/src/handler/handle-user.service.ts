@@ -12,7 +12,7 @@ import {
   OrderService,
 } from '../prisma/order.service';
 import { LocationService } from '../prisma/location.service';
-import { ToolService } from '../prisma/tool.service';
+import { ToolService } from '../prisma/attractive.service';
 import { AIService } from '../AI/AI.service';
 import { WhatsappService } from '../whatsapp/whatsapp.service';
 import { MessageMedia } from 'whatsapp-web.js';

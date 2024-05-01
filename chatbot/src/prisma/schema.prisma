@@ -20,9 +20,8 @@ model User {
   UserFunctionCalling GPTFunctionCalling[]
 }
 
-model Service {
+model Attractive {
   id        String   @id @default(uuid())
-  image     String
   name      String
   price     Float
   address   String
@@ -33,15 +32,15 @@ model Service {
 }
 
 model Order {
-  id        String   @id @default(uuid())
-  code      Int      @unique @default(autoincrement())
-  type      String   @default("PENDING PAYMENT")
-  toolId    String
-  userId    String   @db.Uuid
-  serviceId String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
-  service   Service  @relation(fields: [serviceId], references: [id])
+  id           String     @id @default(uuid())
+  code         Int        @unique @default(autoincrement())
+  type         String     @default("PENDING PAYMENT")
+  toolId       String
+  userId       String     @db.Uuid
+  attractiveId String
+  createdAt    DateTime   @default(now())
+  user         User       @relation(fields: [userId], references: [id])
+  attractive   Attractive @relation(fields: [attractiveId], references: [id])
 }
 
 model GPTFunctionCalling {

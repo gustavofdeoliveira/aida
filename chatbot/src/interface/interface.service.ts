@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { LocationService } from 'src/prisma/location.service';
 import { Point, User } from '@prisma/client';
-import { ToolService } from 'src/prisma/tool.service';
+import { ToolService } from 'src/prisma/attractive.service';
 import { UserService } from 'src/prisma/user.service';
 import { OrderService } from 'src/prisma/order.service';
 import { AIService } from 'src/AI/AI.service';

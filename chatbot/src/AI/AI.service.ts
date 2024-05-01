@@ -76,7 +76,7 @@ export class AIService {
 
   // função principal para gerar uma resposta pelo GPT
   callGPT = async (
-    userRole: 'ADMIN' | 'USER' | 'LEAD' = 'LEAD',
+    userRole: 'ADMIN' | 'USER' | 'LEAD' | 'AGENT' = 'LEAD',
     toolsCordinates: string,
     locationCoordinates: string,
     chatHistory: ChatHistory[],
@@ -86,7 +86,6 @@ export class AIService {
     const { system_message, gpt_tools } = generateLLMSystemMessages(
       userRole,
       toolsCordinates,
-      locationCoordinates,
     );
 
     const res = await this.openai.createChatCompletion({
@@ -297,7 +296,7 @@ export class AIService {
     inputJson.forEach((item) => {
       result += item;
     });
-    return result
+    return result;
   }
 
   // Função que cónstroi o contexto para o GPT da interface
@@ -308,27 +307,25 @@ export class AIService {
         process.env.NEXT_PUBLIC_BACKEND + '/orders/queue',
       );
 
-      let now = ''
-      response.data.forEach(item => {
-
-        if(item.type === "Collecting" || item.type === "To confirm"){
-          now = item
+      let now = '';
+      response.data.forEach((item) => {
+        if (item.type === 'Collecting' || item.type === 'To confirm') {
+          now = item;
         }
-      })
+      });
 
-      let queue = []
-      response.data.forEach(item => {
-
-        if(item.type === "In Progress"){
-          queue.push(item)
+      const queue = [];
+      response.data.forEach((item) => {
+        if (item.type === 'In Progress') {
+          queue.push(item);
         }
-      })
+      });
       const data = {
         now,
         queue,
         history: [],
       };
-      const history = await axios.get( 
+      const history = await axios.get(
         process.env.NEXT_PUBLIC_BACKEND + '/orders/history',
       );
       data['history'] = history.data;
@@ -339,11 +336,6 @@ export class AIService {
       const filteredHistory = data?.history.map((item) =>
         this.filterJson(item),
       );
-
-      
-  
-        
-    
 
       return {
         role: 'system',

@@ -3,7 +3,7 @@ import { Chat, Message } from 'whatsapp-web.js';
 import { UserService } from 'src/prisma/user.service';
 import { AIService } from '../AI/AI.service';
 import { UserDoesntExists } from 'src/prisma/user.service';
-import { ToolService } from '../prisma/tool.service';
+import { ToolService } from '../prisma/attractive.service';
 import { LocationService } from '../prisma/location.service';
 import { OrderService } from '../prisma/order.service';
 import parseCoordinates from './utils/parseCoordinates';
